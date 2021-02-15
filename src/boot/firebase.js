@@ -23,15 +23,16 @@ firebase.initializeApp(firebaseConfig)
 firebase.firestore().enablePersistence()
   .catch(function (err) {
     if (err.code === 'failed-precondition') {
-      // console.log(err)
+      console.log(err)
     } else if (err.code === 'unimplemented') {
-      // console.log(err)
+      console.log(err)
     }
   })
 
 const db = firebase.firestore()
 
 Vue.prototype.$db = db
+Vue.prototype.$firebase = firebase
 
 // 'async' is optional
-export { db }
+export { db, firebase }

@@ -6,6 +6,12 @@ const routes = [
     component: () => import('pages/Index.vue')
   },
 
+  {
+    path: '/telao',
+    name: 'telao',
+    component: () => import('pages/Telao.vue')
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

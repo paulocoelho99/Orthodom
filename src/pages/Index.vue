@@ -1,9 +1,10 @@
 <template>
   <q-layout view="lHh Lpr lFf">
       <q-page-container>
-        <q-page class="q-pa-md">
+        <q-page class="q-pa-md flex flex-center">
           <q-form @submit.prevent="salvar">
-            <q-input label="Cliente" v-model="cliente" filled />
+            <q-input label="Insira seu nome inteiro" v-model="cliente" filled style="width: 500px" />
+            <q-btn type="submit" label="Enviar" color="primary" />
           </q-form>
         </q-page>
       </q-page-container>
@@ -25,7 +26,8 @@ export default {
 
   methods: {
     salvar () {
-      this.$db.collection('chamados').add({ nome: this.cliente })
+      const timestamp = this.$firebase.firestore.FieldValue.serverTimestamp()
+      this.$db.collection('chamados').add({ cliente: this.cliente, createdAt: timestamp })
 
       this.$q.notify('Chamado com sucesso')
 
