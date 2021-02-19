@@ -5,7 +5,7 @@
           <q-list bordered separator>
             <q-item v-for="(chamado, index) in chamados" :key="index">
               <q-item-section>{{ chamado.cliente }}</q-item-section>
-              <q-item-section>{{ chamado.createdAt }}</q-item-section>
+              <q-item-section>{{ chamado.createdAt.toDate() }}</q-item-section>
             </q-item>
           </q-list>
         </q-page>
@@ -19,7 +19,8 @@ export default {
 
   data () {
     return {
-      chamados: []
+      chamados: [],
+      realtime: null
     }
   },
 
@@ -27,18 +28,29 @@ export default {
     this.getClientes()
   },
 
+  // executa quando sai da tela
+  beforeDestroy () {
+    // fecha a conexao realtime com firestore
+    this.realtime()
+  },
+
   methods: {
     getClientes () {
-      this.$db.collection('chamados')
-        .onSnapshot((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
+      this.realtime = this.$db.collection('chamados')
+        .onSnapshot(querySnapshot => {
+          let dados = []
+
+          querySnapshot.forEach(doc => {
             // doc.data() is never undefined for query doc snapshots
-            this.chamados.push(doc.data())
-            console.log(doc.id, ' => ', doc.data())
+            // console.log(doc.id, ' => ', doc.data())
+            if (doc.exists) {
+              dados.push(doc.data())
+            } else {
+              dados = []
+            }
           })
-        })
-        .catch((error) => {
-          alert('Erro ao buscar dados: ' + error)
+
+          this.chamados = dados
         })
     }
   }
