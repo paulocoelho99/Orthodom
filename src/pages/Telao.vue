@@ -30,8 +30,7 @@ export default {
   methods: {
     getClientes () {
       this.$db.collection('chamados')
-        .get()
-        .then((querySnapshot) => {
+        .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             this.chamados.push(doc.data())
